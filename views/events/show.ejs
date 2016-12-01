@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/events">Events</a></h1>
+  <h3><a href="/events">Back</a></h3>
+  <hr>
+  <% Object.keys(event).forEach(function(key) { %>
+    <p><%= key %>: <%= event[key] %></p>
+  <% }) %>
+  <a href="/events/<%= event.id %>/edit"><button>Edit</button></a>
+  <form action="/events/<%= event.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button>Delete</button>
+  </form>
+  <hr>
+</body>
+</html>

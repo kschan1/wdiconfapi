@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/presenters">Presenters</a></h1>
+  <h3><a href="/presenters/<%= presenter.id %>">Back</a></h3>
+  <hr>
+  <p>id: <%= presenter.id %></p>
+  <form action="/presenters/<%= presenter.id %>" method="post">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="id" value="<%= presenter.id %>">
+
+    <label for="first_name">first_name: </label>
+    <input type="text" name="first_name" value="<%= presenter.first_name %>">
+
+    <br><br>
+
+    <label for="last_name">last_name: </label>
+    <input type="text" name="last_name" value="<%= presenter.last_name %>">
+
+    <br><br>
+
+    <label for="company">company: </label>
+    <input type="text" name="company" value="<%= presenter.company %>">
+
+    <br><br>
+
+    <label for="title">title: </label>
+    <input type="text" name="title" value="<%= presenter.title %>">
+
+    <br><br>
+
+    <label for="email">email: </label>
+    <input type="text" name="email" value="<%= presenter.email %>">
+
+    <br><br>
+
+    <button>Update</button>
+  </form>
+  <br>
+  <form action="/presenters/<%= presenter.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button>Delete</button>
+  </form>
+  <hr>
+</body>
+</html>

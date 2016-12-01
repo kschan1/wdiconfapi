@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/venues">Venues</a></h1>
+  <h3><a href="/venues/<%= venue.id %>">Back</a></h3>
+  <hr>
+  <p>id: <%= venue.id %></p>
+  <form action="/venues/<%= venue.id %>" method="post">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="id" value="<%= venue.id %>">
+
+    <label for="name">name: </label>
+    <input type="text" name="name" value="<%= venue.name %>">
+
+    <br><br>
+
+    <label for="address">address: </label>
+    <input type="text" name="address" value="<%= venue.address %>">
+
+    <br><br>
+
+    <button>Update</button>
+  </form>
+  <br>
+  <form action="/venues/<%= venue.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button>Delete</button>
+  </form>
+  <hr>
+</body>
+</html>

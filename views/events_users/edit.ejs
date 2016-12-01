@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/events_users">Events_Users</a></h1>
+  <h3><a href="/events_users/<%= events_user.id %>">Back</a></h3>
+  <hr>
+  <p>id: <%= events_user.id %></p>
+  <form action="/events_users/<%= events_user.id %>" method="post">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="id" value="<%= events_user.id %>">
+
+    <label for="event_id">event_id: </label>
+    <input type="text" name="event_id" value="<%= events_user.event_id %>">
+
+    <br><br>
+
+    <label for="user_id">user_id: </label>
+    <input type="text" name="user_id" value="<%= events_user.user_id %>">
+
+    <br><br>
+
+    <button>Update</button>
+  </form>
+  <br>
+  <form action="/events_users/<%= events_user.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button>Delete</button>
+  </form>
+  <hr>
+</body>
+</html>

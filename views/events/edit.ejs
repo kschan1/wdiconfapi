@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/events">Events</a></h1>
+  <h3><a href="/events/<%= event.id %>">Back</a></h3>
+  <hr>
+  <p>id: <%= event.id %></p>
+  <form action="/events/<%= event.id %>" method="post">
+    <input type="hidden" name="_method" value="put">
+    <input type="hidden" name="id" value="<%= event.id %>">
+
+    <label for="name">name: </label>
+    <input type="text" name="name" value="<%= event.name %>">
+
+    <br><br>
+
+    <label for="date">date: </label>
+    <input type="text" name="date" value="<%= event.date %>">
+
+    <br><br>
+
+    <label for="time">time: </label>
+    <input type="text" name="time" value="<%= event.time %>">
+
+    <br><br>
+
+    <label for="description">description: </label>
+    <input type="text" name="description" value="<%= event.description %>">
+
+    <br><br>
+
+    <label for="venue_id">venue_id: </label>
+    <input type="text" name="venue_id" value="<%= event.venue_id %>">
+
+    <br><br>
+
+    <button>Update</button>
+  </form>
+  <br>
+  <form action="/events/<%= event.id %>" method="post">
+    <input type="hidden" name="_method" value="delete">
+    <button>Delete</button>
+  </form>
+  <hr>
+</body>
+</html>
