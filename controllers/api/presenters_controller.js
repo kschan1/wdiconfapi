@@ -13,7 +13,7 @@ module.exports = function(app,pg,config){
 
     // If user is looking for presenters using event_id, join with Events_Presenters table
     if ( keys.includes('event_id') ) {
-      query += " LEFT JOIN Events_Presenters ON Presenters.id=Events_Presenters.presenter_id"
+      query += " LEFT JOIN Events_Presenters ON Presenters.id=Events_Presenters.presenter_id";
     }
 
     // Add valid keys to the SQL query string
