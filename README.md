@@ -2,14 +2,22 @@
 
 API for WDI Conf app
 
+# Routes
 
-# Initial setup (only once)
 ```
-npm install --save sequelize
-npm install --save pg pg-hstore
-npm install --save sequelize-cli
-node_modules/.bin/sequelize init
-node_modules/.bin/sequelize model:create --name ModelName --attributes attribute1:data_type,attribute2:data_type
+'/admin'
+'/api/events'
+'/api/events/:id'
+'/api/presenters'
+'/api/presenters/:id'
+'/api/users'
+'/api/users/:id'
+'/api/venues'
+'/api/venues/:id'
 ```
 
-node_modules/.bin/sequelize db:migrate
+api routes without /:id has search params available. Search for any of the fields. E.g.
+```
+'/api/events?id=2'
+'/api/presenters/search?first_name=James'
+```
