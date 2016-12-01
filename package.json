@@ -1,0 +1,18 @@
+{
+  "name": "TicTacToe",
+  "version": "0.0.1",
+  "description": "My TicTacToe app",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ejs": "^2.4.1",
+    "express": "4.10.2",
+    "socket.io": "1.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jamesmah/TicTacToe"
+  }
+}
