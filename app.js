@@ -66,10 +66,8 @@ require('./controllers/api/venues_controller')(app,pg,config);
 var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
-  
+
   socket.on('disconnect', function() {
 
   });
 });
-
-
