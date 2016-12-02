@@ -3,12 +3,12 @@ module.exports = function(app,pg,config){
   // GET '/api/presenters'
   app.get('/api/presenters', function(req, res) {
     // SQL query string
-    var query = "SELECT Presenters.id, Presenters.first_name, Presenters.last_name, Presenters.company, Presenters.title, Presenters.email FROM Presenters";
+    var query = "SELECT Presenters.id, Presenters.first_name, Presenters.last_name, Presenters.company, Presenters.title, Presenters.email, Presenters.bio, Presenters.image_url FROM Presenters";
 
     // Remove keys that are not valid
     keys = Object.keys(req.query);
     keys.filter(function(key) {
-      ['id', 'first_name', 'last_name', 'company', 'title', 'email', 'event_id'].includes(key);
+      ['id', 'first_name', 'last_name', 'company', 'title', 'email', 'event_id', 'bio', 'image_url'].includes(key);
     });
 
     // If user is looking for presenters using event_id, join with Events_Presenters table
