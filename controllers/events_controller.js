@@ -6,7 +6,8 @@ module.exports = function(app,pg,config){
     var query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, venue_id FROM Events ORDER BY id DESC";
 
     // Retrieve data from Postgres and sent response to client
-    pg.connect(process.env.DATABASE_URL, function(err, client) {
+    var client = new pg.Client(config);
+    client.connect(function (err) {
       client.query(query, function (err, result) {
         if(!err) {
           res.render('events/index', {events: result.rows});
