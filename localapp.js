@@ -12,7 +12,6 @@ var config = {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-pg.defaults.ssl = true;
 
 // Express.js
 
