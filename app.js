@@ -2,7 +2,7 @@
 
 var pg = require('pg');
 
-var config = {
+var config = process.env.DATABASE_URL || {
   user: '', //env var: PGUSER
   database: 'wdiconfapi', //env var: PGDATABASE
   password: '', //env var: PGPASSWORD
@@ -12,7 +12,7 @@ var config = {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-pg.defaults.ssl = true;
+// pg.defaults.ssl = true;
 
 // pg.defaults.ssl = true;
 // pg.connect(process.env.DATABASE_URL, function(err, client) {
