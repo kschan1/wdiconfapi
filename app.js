@@ -12,19 +12,9 @@ var config = process.env.DATABASE_URL || {
   idleTimeoutMillis: 30000, // how long a client is allowed to remain idle before being closed
 };
 
-pg.defaults.ssl = true;
-
-// pg.defaults.ssl = true;
-// pg.connect(process.env.DATABASE_URL, function(err, client) {
-//   if (err) throw err;
-//   console.log('Connected to postgres! Getting schemas...');
-
-//   client
-//     .query('SELECT table_schema,table_name FROM information_schema.tables;')
-//     .on('row', function(row) {
-//       console.log(JSON.stringify(row));
-//     });
-// });
+if (typeof process.env.DATABASE_URL !== 'undefined') {
+  pg.defaults.ssl = true;
+}
 
 
 // Express.js
