@@ -3,7 +3,7 @@ module.exports = function(app,pg,config){
   // GET '/api/presenters'
   app.get('/api/presenters', function(req, res) {
     // SQL query string
-    var query = "SELECT Presenters.id, Presenters.first_name, Presenters.last_name, Presenters.company, Presenters.title, Presenters.email Presenters.bio, Presenters.image_url FROM Presenters";
+    var query = "SELECT Presenters.id, Presenters.first_name, Presenters.last_name, Presenters.company, Presenters.title, Presenters.email, Presenters.bio, Presenters.image_url FROM Presenters";
 
     // Remove keys that are not valid
     keys = Object.keys(req.query);
