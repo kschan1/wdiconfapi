@@ -58,14 +58,13 @@ module.exports = function(app,pg,config){
 
   // POST '/presenters'
   app.post('/presenters', function(req, res) {
-    var keys = Object.keys(req.body)
+    var keys = Object.keys(req.body);
     values_array = keys.map(function (key) {
       return "'" + req.body[key] + "'";
     });
 
     // SQL query string
-    var  query = "INSERT INTO Presenters (" + keys.join(", ") + ") VALUES ("
-      + values_array.join(", ") + ")";
+    var  query = "INSERT INTO Presenters (" + keys.join(", ") + ") VALUES (" + values_array.join(", ") + ")";
 
     // Retrieve data from Postgres and sent response to client
     var client = new pg.Client(config);
