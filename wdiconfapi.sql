@@ -1,11 +1,11 @@
 
 -- \c wdiconfapi
--- DROP TABLE Events_Users;
--- DROP TABLE Events_Presenters;
--- DROP TABLE Venues;
--- DROP TABLE Events;
--- DROP TABLE Presenters;
--- DROP TABLE Users;
+DROP TABLE Events_Users;
+DROP TABLE Events_Presenters;
+DROP TABLE Events;
+DROP TABLE Venues;
+DROP TABLE Presenters;
+DROP TABLE Users;
 
 DROP DATABASE wdiconfapi;
 CREATE DATABASE wdiconfapi;
