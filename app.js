@@ -22,12 +22,16 @@ if (typeof process.env.DATABASE_URL !== 'undefined') {
 var express = require('express');
 var app = express();
 var url = require('url');
+var cors = require('cors');
+var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
 var server = require('http').createServer(app);
 var port = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
+app.use(morgan('dev'));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(methodOverride(function (req, res) {
@@ -62,10 +66,8 @@ require('./controllers/api/venues_controller')(app,pg,config);
 var io = require('socket.io')(server);
 
 io.on('connection', function(socket){
-  
+
   socket.on('disconnect', function() {
 
   });
 });
-
-
