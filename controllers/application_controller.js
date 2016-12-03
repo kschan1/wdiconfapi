@@ -24,6 +24,10 @@ module.exports = function(app,pg,config){
   //   });
   // });
 
+  app.get('/signin', function(req, res) {
+    res.render('signin');
+  });
+
   app.post('/authenticate', function(req, res) {
     // SQL query string
     var query = "SELECT * FROM Users WHERE email='" + req.body.email + "'";
@@ -34,6 +38,8 @@ module.exports = function(app,pg,config){
       client.query(query, function (err, result) {
         if(!err) {
           if (result.rows[0].password_digest === req.body.password) {
+            console.log(result.rows[0]);
+            var token = jwt.encode(result.rows[0], 'secret');
             res.json({success: true, token: token});
           }
           else {
@@ -49,7 +55,8 @@ module.exports = function(app,pg,config){
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
       var token = req.headers.authorization.split(' ')[1];
       var decodedtoken = jwt.decode(token, 'secret');
-      return res.json({success: true, msg: 'hello '+ decodedtoken.name});
+      console.log(decodedtoken);
+      return res.json({success: true, msg: 'hello '+ decodedtoken.first_name});
     }
     else {
       return res.json({success:false, msg: 'No header'});

@@ -1,4 +1,5 @@
-
+DROP DATABASE wdiconfapi;
+CREATE DATABASE wdiconfapi;
 -- \c wdiconfapi
 DROP TABLE Events_Users;
 DROP TABLE Events_Presenters;
@@ -6,9 +7,6 @@ DROP TABLE Events;
 DROP TABLE Venues;
 DROP TABLE Presenters;
 DROP TABLE Users;
-
-DROP DATABASE wdiconfapi;
-CREATE DATABASE wdiconfapi;
 
 CREATE TABLE Venues (
   id SERIAL PRIMARY KEY,
