@@ -45,6 +45,9 @@ app.use(methodOverride(function (req, res) {
 }));
 app.use(express.static(__dirname + '/public'));
 
+// Controller
+require('./controllers/application_controller')(app,pg,config);
+
 
 // Passport stuff
 app.use(passport.initialize());
@@ -83,17 +86,6 @@ server.listen(port, function () {
   console.log('Server listening at port %d', port);
 });
 
-require('./controllers/application_controller')(app,pg,config);
-require('./controllers/events_controller')(app,pg,config);
-require('./controllers/events_presenters_controller')(app,pg,config);
-require('./controllers/events_users_controller')(app,pg,config);
-require('./controllers/presenters_controller')(app,pg,config);
-require('./controllers/users_controller')(app,pg,config);
-require('./controllers/venues_controller')(app,pg,config);
-require('./controllers/api/events_controller')(app,pg,config);
-require('./controllers/api/presenters_controller')(app,pg,config);
-require('./controllers/api/users_controller')(app,pg,config);
-require('./controllers/api/venues_controller')(app,pg,config);
 
 
 // Socket.io

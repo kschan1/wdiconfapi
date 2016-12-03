@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+</head>
+<body>
+  <h1><a href="/all">all tables</a></h1>
+  <h2><a href="/<%= table.name %>"><%= table.name %></a></h1>
+  <% items.forEach(function(item) { %>
+    <h3><a href="/<%= table.name %>/<%= item.id %>">Back</a></h3>
+    <hr>
+    <p>id: <%= item.id %></p>
+    <form action="/<%= table.name %>/<%= item.id %>" method="post">
+      <input type="hidden" name="_method" value="put">
+      <input type="hidden" name="id" value="<%= item.id %>">
+      <% for (var key in item) { %>
+          <% if (key !== 'id') { %>
+          <label for="<%= key %>"><%= key %>: </label>
+          <input type="text" name="<%= key %>" value="<%= item[key] %>">
+          <br><br>
+        <% } %>
+      <% } %>
+      <button>Update</button>
+    </form>
+    <form action="/<%= table.name %>/<%= item.id %>" method="post">
+      <input type="hidden" name="_method" value="delete">
+      <button>Delete</button>
+    </form>
+    <hr>
+  <% }) %>
+</body>
+</html>
