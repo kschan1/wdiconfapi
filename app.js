@@ -26,6 +26,7 @@ var cors = require('cors');
 var morgan = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var passport = require('passport');
 var server = require('http').createServer(app);
 var port = process.env.PORT || 3000;
 
@@ -43,6 +44,40 @@ app.use(methodOverride(function (req, res) {
   }
 }));
 app.use(express.static(__dirname + '/public'));
+
+
+// Passport stuff
+app.use(passport.initialize());
+
+var JwtStrategy = require('passport-jwt').Strategy;
+var ExtractJwt = require('passport-jwt').ExtractJwt;
+
+var  opts = {};
+opts.secretOrKey = 'secret';
+opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
+passport.use(new JwtStrategy(opts, function(jwt_payload, done){
+  
+  // SQL query string
+  var query = "SELECT * FROM Users WHERE id='" + jwt_payload.id + "'";
+
+  // Retrieve data from Postgres and sent response to client
+  var client = new pg.Client(config);
+  client.connect(function (err) {
+    client.query(query, function (err, result) {
+      if(!err) {
+        if (result.rows.length > 0) {
+          return done(null, result.rows[0]);
+        }
+        else {
+          return done(null, false);
+        }
+      }
+      client.end();
+    });
+  });
+
+}));
+
 
 server.listen(port, function () {
   console.log('Server listening at port %d', port);

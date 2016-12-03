@@ -1,35 +1,23 @@
+var Table = require('./table.js');
+var ApiRequest = require('./api_request.js');
+
 module.exports = function(app,pg,config){
+  var table = new Table('venues');
+  table.get_columns(pg,config);
 
-  // GET '/api/venues'
-  app.get('/api/venues', function(req, res) {
-    // SQL query string
-    var query = "SELECT * FROM Venues";
-
-    // Retrieve data from Postgres and sent response to client
-    var client = new pg.Client(config);
-    client.connect(function (err) {
-      client.query(query, function (err, result) {
-        if(err) {res.json({Response: "False"});}
-        else {res.json({Results: result.rows, Response: "True"});}
-        client.end();
-      });
-    });
+  // GET '/api/#table.name'
+  app.get('/api/' + table.name, function(req, res) {
+    var request = new ApiRequest(req,res,table);
+    request.build_sql();
+    request.execute(pg,config);
   });
 
-  // GET '/venues/:id'
-  app.get('/api/venues/:id', function(req, res) {
-    // SQL query string
-    var  query = "SELECT * FROM Venues WHERE id=" + req.params.id;
-
-    // Retrieve data from Postgres and sent response to client
-    var client = new pg.Client(config);
-    client.connect(function (err) {
-      client.query(query, function (err, result) {
-        if(err) {res.json({Response: "False"});}
-        else {res.json({Results: result.rows, Response: "True"});}
-        client.end();
-      });
-    });
+  // GET '/api/#table.name/:id'
+  app.get('/api/' + table.name + '/:id', function(req, res) {
+    var request = new ApiRequest(req,res,table);
+    request.sql_query += " WHERE id=$1";
+    request.param_values = [req.params.id];
+    request.execute(pg,config);
   });
 
 };

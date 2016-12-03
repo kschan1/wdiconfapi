@@ -3,7 +3,7 @@ module.exports = function(app,pg,config){
   // GET '/events'
   app.get('/events', function(req, res) {
     // SQL query string
-    var query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, venue_id FROM Events ORDER BY id DESC";
+    var query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, image_url, venue_id FROM Events ORDER BY id DESC";
 
     // Retrieve data from Postgres and sent response to client
     var client = new pg.Client(config);
@@ -25,7 +25,7 @@ module.exports = function(app,pg,config){
   // GET '/events/:id'
   app.get('/events/:id', function(req, res) {
     // SQL query string
-    var  query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, venue_id FROM Events WHERE id=" + req.params.id;
+    var  query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, image_url, venue_id FROM Events WHERE id=" + req.params.id;
 
     // Retrieve data from Postgres and sent response to client
     var client = new pg.Client(config);
@@ -42,7 +42,7 @@ module.exports = function(app,pg,config){
   // GET '/events/:id/edit'
   app.get('/events/:id/edit', function(req, res) {
     // SQL query string
-    var  query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, venue_id FROM Events WHERE id=" + req.params.id;
+    var  query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, image_url, venue_id FROM Events WHERE id=" + req.params.id;
 
     // Retrieve data from Postgres and sent response to client
     var client = new pg.Client(config);

@@ -1,54 +1,31 @@
+var Table = require('./table.js');
+var ApiRequest = require('./api_request.js');
+
 module.exports = function(app,pg,config){
+  var table = new Table('users');
+  table.get_columns(pg,config);
 
-  // GET '/api/users'
-  app.get('/api/users', function(req, res) {
-    // SQL query string
-    var query = "SELECT Users.id, Users.first_name, Users.last_name, Users.email, Users.username, Users.image_url FROM Users";
+  // GET '/api/#table.name'
+  app.get('/api/' + table.name, function(req, res) {
+    var request = new ApiRequest(req,res,table);
 
-    // Remove keys that are not valid
-    keys = Object.keys(req.query);
-    keys.filter(function(key) {
-      ['id', 'first_name', 'last_name', 'email', 'username', 'event_id', 'image_url'].includes(key);
-    });
-
-      // If user is looking for users using event_id, join with Events_Users table
-    if ( keys.includes('event_id') ) {
-      query += " LEFT JOIN Events_Users ON Users.id=Events_Users.user_id";
+    // If user is looking for users using event_id, join with Events_Users table
+    if (!!req.query.event_id) {
+      request.conditions.push("event_id=$" + (request.param_values.length + 1) + "");
+      request.param_values.push('event_id');
+      request.sql_query += " LEFT JOIN Events_Users ON Users.id=Events_Users.user_id";
     }
 
-    // Add valid keys to the SQL query string
-    if (keys.length > 0) {
-      param_array = keys.map(function (key) {
-        return key + "='" + req.query[key] + "'";
-      });
-      query += " WHERE " + param_array.join(", ");
-    }
-
-    // Retrieve data from Postgres and sent response to client
-    var client = new pg.Client(config);
-    client.connect(function (err) {
-      client.query(query, function (err, result) {
-        if(err) {res.json({Response: "False"});}
-        else {res.json({Results: result.rows, Response: "True"});}
-        client.end();
-      });
-    });
+    request.build_sql();
+    request.execute(pg,config);
   });
 
-  // GET '/api/users/:id'
-  app.get('/api/users/:id', function(req, res) {
-    // SQL query string
-    var  query = "SELECT id, first_name, last_name, email, username, image_url FROM Users WHERE id=" + req.params.id;
-
-    // Retrieve data from Postgres and sent response to client
-    var client = new pg.Client(config);
-    client.connect(function (err) {
-      client.query(query, function (err, result) {
-        if(err) {res.json({Response: "False"});}
-        else {res.json({Results: result.rows, Response: "True"});}
-        client.end();
-      });
-    });
+  // GET '/api/#table.name/:id'
+  app.get('/api/' + table.name + '/:id', function(req, res) {
+    var request = new ApiRequest(req,res,table);
+    request.sql_query += " WHERE id=$1";
+    request.param_values = [req.params.id];
+    request.execute(pg,config);
   });
 
 };

@@ -19,5 +19,6 @@ API for WDI Conf app
 api routes without /:id has search params available. Search for any of the fields. E.g.
 ```
 '/api/events?id=2'
-'/api/presenters/search?first_name=James'
+'/api/events?date=20161210&q=ruby'
+// q is a query that will return rows which strings consists the key word
 ```
