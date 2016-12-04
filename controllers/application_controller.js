@@ -2,27 +2,21 @@ var jwt = require('jwt-simple');
 
 module.exports = function(app,pg,config){
 
-  // GET '/'
-  app.get('/admin', function(req, res) {
-    res.render('admin');
+  var Table = require('./table.js');
+
+  var table = {};
+  var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
+  var client = new pg.Client(config);
+  client.connect(function (err) {
+    client.query(sql_query, function (err, result) {
+      if (err) throw err;
+      result.rows.forEach(function(row) {
+        table[row.table_name] = new Table(row.table_name);
+        table[row.table_name].get_columns(pg,config);
+      });
+      client.end();
+    });
   });
-
-  // // GET '/events'
-  // app.get('/events', function(req, res) {
-  //   // SQL query string
-  //   var query = "SELECT id, name, to_char(date, 'DD Month YYYY') AS date, to_char(time, 'HH12:MIAM') AS time, description, venue_id FROM Events ORDER BY id DESC";
-
-  //   // Retrieve data from Postgres and sent response to client
-  //   var client = new pg.Client(config);
-  //   client.connect(function (err) {
-  //     client.query(query, function (err, result) {
-  //       if(!err) {
-  //         res.render('events/index', {events: result.rows});
-  //       }
-  //       client.end();
-  //     });
-  //   });
-  // });
 
   app.get('/signin', function(req, res) {
     res.render('signin');
@@ -62,5 +56,8 @@ module.exports = function(app,pg,config){
       return res.json({success:false, msg: 'No header'});
     }
   });
+
+  require('./controller_api')(app,pg,config,table);
+  require('./controller')(app,pg,config,table);
 
 };

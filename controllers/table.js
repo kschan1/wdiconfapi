@@ -6,9 +6,13 @@ module.exports = function Table(table_name) {
   this.get_columns = function(pg,config) {
     var that = this;
     var sql_query = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name=$1";
-    pg.connect(config, function (err, client) {
+    var client = new pg.Client(config);
+    client.connect(function (err) {
       client.query(sql_query, [that.name], function (err, result) {
-        if(!err) {that.columns = result.rows;}
+        if (err) throw err;
+        that.columns = result.rows.filter(function(row) {
+          return row.column_name !== 'password_digest';
+        });
         client.end();
       });
     });

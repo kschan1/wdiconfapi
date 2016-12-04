@@ -1,6 +1,6 @@
-DROP DATABASE wdiconfapi;
-CREATE DATABASE wdiconfapi;
--- \c wdiconfapi
+-- DROP DATABASE wdiconfapi;
+-- CREATE DATABASE wdiconfapi;
+\c wdiconfapi
 DROP TABLE Events_Users;
 DROP TABLE Events_Presenters;
 DROP TABLE Events;
