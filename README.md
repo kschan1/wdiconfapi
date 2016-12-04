@@ -1,4 +1,5 @@
 # WDI Conf API
+[http://wdiconfapi.herokuapp.com/](http://wdiconfapi.herokuapp.com/all)
 
 ## Technologies used
 HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
