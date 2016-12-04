@@ -2,6 +2,7 @@
 
 ## Technologies used
 HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
+
 Express middleware: bodyparser, cors, ejs, method-override, morgan
 
 ## Team
