@@ -1,4 +1,4 @@
-module.exports = function Table(table_name) {
+module.exports = function Table(table_name, ignore) {
   this.name = table_name;
   this.columns = [];
 
@@ -11,7 +11,7 @@ module.exports = function Table(table_name) {
       client.query(sql_query, [that.name], function (err, result) {
         if (err) throw err;
         that.columns = result.rows.filter(function(row) {
-          return row.column_name !== 'password_digest';
+          return !ignore.includes(row.column_name);
         });
         client.end();
       });
