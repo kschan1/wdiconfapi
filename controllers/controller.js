@@ -10,7 +10,7 @@ module.exports = function(app,pg,config,table){
   // GET '/:table_name'
   app.get('/:table_name', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.query,table[table_name]);
     request.build_sql();
     request.render_ejs('models/index',pg,config,res);
@@ -19,14 +19,14 @@ module.exports = function(app,pg,config,table){
   // GET '/:table_name/new'
   app.get('/:table_name/new', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     res.render('models/new',{table: table[table_name]});
   });
 
   // GET '/:table_name/:id'
   app.get('/:table_name/:id', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.params,table[table_name]);
     request.build_sql();
     request.render_ejs('models/show',pg,config,res);
@@ -35,7 +35,7 @@ module.exports = function(app,pg,config,table){
   // GET '/:table_name/:id/edit'
   app.get('/:table_name/:id/edit', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.params,table[table_name]);
     request.build_sql();
     request.render_ejs('models/edit',pg,config,res);
@@ -44,7 +44,7 @@ module.exports = function(app,pg,config,table){
   // POST '/:table_name'
   app.post('/:table_name', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.body,table[table_name]);
     request.build_sql_post();
     request.redirect('/' + table_name,pg,config,res);
@@ -53,7 +53,7 @@ module.exports = function(app,pg,config,table){
   // PUT '/:table_name/:id'
   app.put('/:table_name/:id', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.body,table[table_name]);
     request.build_sql_put();
     var route = '/' + table_name + '/' + req.params.id;
@@ -63,7 +63,7 @@ module.exports = function(app,pg,config,table){
   // DELETE '/:table_name/:id'
   app.delete('/:table_name/:id', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/all');
     var request = new Request(req.params,table[table_name]);
     var sql_event;
     var sql_query2;
