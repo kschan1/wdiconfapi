@@ -13,7 +13,7 @@ module.exports = function(app,pg,config,table){
   // GET '/api/#table.name'
   app.get('/api/:table_name', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/api');
     var request = new Request(req.query,table[table_name]);
 
     switch(table_name) {
@@ -57,7 +57,7 @@ module.exports = function(app,pg,config,table){
   // GET '/api/#table.name/:id'
   app.get('/api/:table_name/:id', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/');
+    if (!(table_name in table)) res.redirect('/api');
     var query = {id: req.params.id};
     var request = new Request(query,table[table_name]);
     request.build_sql();
