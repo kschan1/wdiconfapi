@@ -1,5 +1,5 @@
 # WDI Conf API
-[http://wdiconfapi.herokuapp.com/](http://wdiconfapi.herokuapp.com/)
+[http://wdiconfapi.herokuapp.com/api](http://wdiconfapi.herokuapp.com/api)
 
 ## Technologies used
 HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
@@ -7,14 +7,14 @@ HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
 Express middleware: bodyparser, cors, ejs, method-override, morgan
 
 ## Team
-* [soundtemple](https://github.com/soundtemple)
-* [charithperera](https://github.com/charithperera)
 * [jamesmah](https://github.com/jamesmah)
 * [kschan1](https://github.com/kschan1)
+* [soundtemple](https://github.com/soundtemple)
+* [charithperera](https://github.com/charithperera)
 
 ## Introduction
 
-API built for WDI Conf App
+Search API built for WDI Conf App
 
 [https://github.com/charithperera/wdiconfapp](https://github.com/charithperera/wdiconfapp)
 
@@ -27,6 +27,7 @@ HTML pages for accessing tables
 
 API routes:
 ```
+'/api'
 '/api/events'
 '/api/events/:id'
 '/api/presenters'
