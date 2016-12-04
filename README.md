@@ -2,9 +2,9 @@
 [http://wdiconfapi.herokuapp.com/api](http://wdiconfapi.herokuapp.com/api)
 
 ## Technologies used
-HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
+HTML, CSS, Javascript, NodeJS, Express, pg, Postgres
 
-Express middleware: bodyparser, cors, ejs, method-override, morgan
+Express middleware: bodyparser, cors, ejs, method-override, morgan, passport
 
 ## Team
 * [jamesmah](https://github.com/jamesmah)
