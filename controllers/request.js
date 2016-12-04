@@ -5,10 +5,10 @@ module.exports = function Request(query,table) {
 
   // Generate SQL select portion of query
   select_string = table.columns.map(function(column) {
-    if (column.column_name === 'date') {
+    if ( column.data_type.includes('date') ) {
       return "to_char(date, 'DD Month YYYY') AS date";
     }
-    else if (column.column_name === 'time') {
+    else if ( column.data_type.includes('time') ) {
       return "to_char(time, 'HH12:MIAM') AS time";
     }
     return table.name + "." + column.column_name;

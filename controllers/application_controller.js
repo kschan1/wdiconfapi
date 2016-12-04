@@ -1,8 +1,10 @@
 var jwt = require('jwt-simple');
+var Table = require('./table.js');
 
 module.exports = function(app,pg,config){
 
-  var Table = require('./table.js');
+  // get information of all table available in postgres database and store them in table objects
+  var ignore = ['password_digest'];
 
   var table = {};
   var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name";
@@ -11,7 +13,7 @@ module.exports = function(app,pg,config){
     client.query(sql_query, function (err, result) {
       if (err) throw err;
       result.rows.forEach(function(row) {
-        table[row.table_name] = new Table(row.table_name);
+        table[row.table_name] = new Table(row.table_name,ignore);
         table[row.table_name].get_columns(pg,config);
       });
       client.end();
