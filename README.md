@@ -7,10 +7,10 @@ HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
 Express middleware: bodyparser, cors, ejs, method-override, morgan
 
 ## Team
-* [soundtemple](https://github.com/soundtemple)
-* [charithperera](https://github.com/charithperera)
 * [jamesmah](https://github.com/jamesmah)
 * [kschan1](https://github.com/kschan1)
+* [soundtemple](https://github.com/soundtemple)
+* [charithperera](https://github.com/charithperera)
 
 ## Introduction
 
