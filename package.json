@@ -1,10 +1,10 @@
 {
   "name": "wdiconfapi",
   "version": "0.0.1",
-  "description": "WDI Conference API",
+  "description": "WDI Conf API",
   "main": "app.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "body-parser": "^1.15.2",
@@ -21,6 +21,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/jamesmah/wdiconfapi"
+    "url": "https://github.com/kschan1/wdiconfapi"
   }
 }
