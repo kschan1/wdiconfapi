@@ -1,8 +1,22 @@
 # WDI Conf API
 
-API for WDI Conf app
+## Technologies used
+HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
+Express middleware: bodyparser, cors, ejs, method-override, morgan
 
-# Routes
+## Team
+* [soundtemple](https://github.com/soundtemple)
+* [charithperera](https://github.com/charithperera)
+* [jamesmah](https://github.com/jamesmah)
+* [kschan1](https://github.com/kschan1)
+
+## Introduction
+
+API built for WDI Conf App
+
+[https://github.com/charithperera/wdiconfapp](https://github.com/charithperera/wdiconfapp)
+
+## Routes
 
 HTML pages for accessing tables
 ```
@@ -45,3 +59,6 @@ Able to use queries to search for relational data. E.g.
 '/api/users?event_id=2'
 '/api/events?user_id=2&presenter_id=1'
 ```
+## Notes
+* SQL queries are parameterised to prevent SQL injection.
+* Routes are dynamic, based on tables available in Postgres database
