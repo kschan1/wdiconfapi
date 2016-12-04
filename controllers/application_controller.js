@@ -5,7 +5,7 @@ module.exports = function(app,pg,config){
   var Table = require('./table.js');
 
   var table = {};
-  var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public'";
+  var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name";
   var client = new pg.Client(config);
   client.connect(function (err) {
     client.query(sql_query, function (err, result) {

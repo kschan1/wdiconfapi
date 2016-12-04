@@ -2,6 +2,14 @@ var Request = require('./request.js');
 
 module.exports = function(app,pg,config,table){
 
+  // GET '/api'
+  app.get('/api', function(req, res) {
+    res.json({
+      table_names: Object.keys(table),
+      table_content: table
+    });
+  });
+
   // GET '/api/#table.name'
   app.get('/api/:table_name', function(req, res) {
     var table_name = req.params.table_name;

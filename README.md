@@ -1,5 +1,5 @@
 # WDI Conf API
-[http://wdiconfapi.herokuapp.com/](http://wdiconfapi.herokuapp.com/)
+[http://wdiconfapi.herokuapp.com/api](http://wdiconfapi.herokuapp.com/api)
 
 ## Technologies used
 HTML, CSS, Javascript, NodeJS, Express, Passport, jwt, pg, Postgres
@@ -27,6 +27,7 @@ HTML pages for accessing tables
 
 API routes:
 ```
+'/api'
 '/api/events'
 '/api/events/:id'
 '/api/presenters'
