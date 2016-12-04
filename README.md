@@ -14,7 +14,7 @@ Express middleware: bodyparser, cors, ejs, method-override, morgan
 
 ## Introduction
 
-API built for WDI Conf App
+Search API built for WDI Conf App
 
 [https://github.com/charithperera/wdiconfapp](https://github.com/charithperera/wdiconfapp)
 
