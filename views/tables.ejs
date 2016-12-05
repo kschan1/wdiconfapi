@@ -5,8 +5,9 @@
   <title>Document</title>
 </head>
 <body>
+  <p><a href="/logout">logout</a></p>
   <% table_names.forEach(function(name) { %>
-    <h2><a href="/<%= name %>"><%= name %></a></h2>
+    <h2><a href="/tables/<%= name %>"><%= name %></a></h2>
   <% }) %>
 </body>
 </html>

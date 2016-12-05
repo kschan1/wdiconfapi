@@ -22,7 +22,7 @@ Search API built for WDI Conf App
 
 HTML pages for accessing tables
 ```
-'/all'
+'/tables'
 ```
 
 API routes:
@@ -56,6 +56,12 @@ q is a query that will return rows which strings consists the key word
 '/api/presenters&q=ka'
 '/api/events?date=20161210&q=ruby'
 ```
+user sort and order for sorting using a column
+```
+'/api/presenters?sort=last_name'
+'/api/events?date=20161209&sort=time&order=desc'
+```
+
 Able to use queries to search for relational data. E.g.
 
 ```
