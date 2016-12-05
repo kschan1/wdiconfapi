@@ -45,6 +45,23 @@ Relational tables:
 '/api/events_users/:id'
 ```
 
+valid params
+```
+':all table columns' = searches for value equals to. requires entire value to match
+'q' = searches within all string in table for match
+'time_from' = all results after and including specified time
+'time_to' = all results before and including specified time
+'date_from' = all results after and including specified date
+'date_to' = all results before and including specified date
+'sort' = sort results using one of the valid columns
+'order' = sort using 'asc' or 'desc' // Default is 'asc'
+':relational data' = searched for values equals to.
+  list of relational data:
+  - events: 'presenter_id', 'user_id'
+  - presenters: 'event_id'
+  - users: 'event_id'
+```
+
 api routes and index pages have search params available. Search for any of the fields. E.g.
 ```
 '/api/events?id=2'
@@ -56,6 +73,12 @@ q is a query that will return rows which strings consists the key word
 '/api/presenters&q=ka'
 '/api/events?date=20161210&q=ruby'
 ```
+find a range of dates or times
+```
+'/api/events?date_from=20161210&time_from=1000'
+'/api/events?date_to=20161215&time_to=1100'
+```
+
 user sort and order for sorting using a column
 ```
 '/api/presenters?sort=last_name'
