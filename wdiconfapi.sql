@@ -46,7 +46,7 @@ CREATE TABLE Users (
   id SERIAL PRIMARY KEY,
   first_name VARCHAR(255),
   last_name VARCHAR(255),
-  email VARCHAR(255),
+  email VARCHAR(255) NOT NULL UNIQUE,
   username VARCHAR(255),
   password_digest VARCHAR(255),
   image_url TEXT,

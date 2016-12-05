@@ -1,3 +1,4 @@
+var jwt = require('jwt-simple');
 var Request = require('./request.js');
 
 module.exports = function(app,pg,config,tables){
@@ -64,4 +65,77 @@ module.exports = function(app,pg,config,tables){
     request.send_json(pg,config,res);
   });
 
+  // POST '/api/:table_name'
+  app.post('/api/:table_name', isLoggedIn, function(req, res) {
+    var table_name = req.params.table_name;
+    if (!(table_name in tables)) res.redirect('/tables');
+    var request = new Request(req.body,tables[table_name]);
+    request.build_sql_post();
+    request.ajax(pg,config,res);
+  });
+
+  // PUT '/api/:table_name/:id'
+  app.put('/api/:table_name/:id', isLoggedIn, function(req, res) {
+    var table_name = req.params.table_name;
+    if (!(table_name in tables)) res.redirect('/tables');
+    var request = new Request(req.body,tables[table_name]);
+    request.build_sql_put();
+    var route = '/' + table_name + '/' + req.params.id;
+    request.ajax(pg,config,res);
+  });
+
+  // DELETE '/api/:table_name/:id'
+  app.delete('/api/:table_name/:id', isLoggedIn, function(req, res) {
+    var table_name = req.params.table_name;
+    if (!(table_name in tables)) res.redirect('/tables');
+    var request = new Request(req.params,tables[table_name]);
+    var sql_event;
+    var sql_query2;
+    switch(table_name) {
+    case 'events':
+      sql_query = "DELETE FROM events_presenters WHERE event_id=" + req.params.id;
+      sql_query2 = "DELETE FROM events_users WHERE event_id=" + req.params.id;
+      request.build_sql_delete();
+      request.three_queries_ajax(sql_query,sql_query2,pg,config,res);
+      break;
+    case 'presenters':
+      sql_query = "DELETE FROM events_presenters WHERE presenter_id=" + req.params.id;
+      request.build_sql_delete();
+      request.two_queries_ajax(sql_query,pg,config,res);
+      break;
+    case 'users':
+      // SQL query string
+      sql_query = "DELETE FROM events_users WHERE user_id=" + req.params.id;
+      request.build_sql_delete();
+      request.two_queries_ajax(sql_query,pg,config,res);
+      break;
+    case 'venues':
+      sql_query = "UPDATE events SET venue_id=NULL WHERE venue_id=" + req.params.id;
+      request.build_sql_delete();
+      request.two_queries_ajax(sql_query,pg,config,res);
+      break;
+    default:
+      request.build_sql_delete();
+      request.ajax(pg,config,res);
+    }
+  });
+
 };
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on 
+  if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+    // console.log(req.headers.authorization);
+    var token = req.headers.authorization.split(' ')[1];
+    var decodedtoken = jwt.decode(token, 'secret');
+    // console.log(decodedtoken);
+    if (decodedtoken.admin) {
+      return next();
+    }
+  }
+
+  // if they aren't redirect them to the home page
+  res.json({success: false});
+}

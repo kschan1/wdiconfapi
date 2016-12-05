@@ -84,6 +84,8 @@ module.exports = function(passport,pg,config) {
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
     passport.use(new JwtStrategy(opts, function(jwt_payload, done){
       
+        console.log("HIHIH");
+
       // SQL query string
       var query = "SELECT * FROM Users WHERE id='" + jwt_payload.id + "'";
 

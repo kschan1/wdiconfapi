@@ -37,6 +37,7 @@ API routes:
 '/api/venues'
 '/api/venues/:id'
 ```
+
 Relational tables:
 ```
 '/api/events_presenters'
@@ -47,7 +48,7 @@ Relational tables:
 
 valid params
 ```
-':all table columns' = searches for value equals to. requires entire value to match
+':column_name' = searches for value equals to. requires entire value to match. valid for all columns
 'q' = searches within all string in table for match
 'time_from' = all results after and including specified time
 'time_to' = all results before and including specified time
@@ -55,7 +56,7 @@ valid params
 'date_to' = all results before and including specified date
 'sort' = sort results using one of the valid columns
 'order' = sort using 'asc' or 'desc' // Default is 'asc'
-':relational data' = searched for values equals to.
+':relational_data' = searched for values equals to.
   list of relational data:
   - events: 'presenter_id', 'user_id'
   - presenters: 'event_id'
@@ -67,12 +68,13 @@ api routes and index pages have search params available. Search for any of the f
 '/api/events?id=2'
 '/users?first_name=chaz'
 ```
-q is a query that will return rows which strings consists the key word
 
+q is a query that will return rows which strings consists the key word
 ```
 '/api/presenters&q=ka'
 '/api/events?date=20161210&q=ruby'
 ```
+
 find a range of dates or times
 ```
 '/api/events?date_from=20161210&time_from=1000'
@@ -86,11 +88,19 @@ user sort and order for sorting using a column
 ```
 
 Able to use queries to search for relational data. E.g.
-
 ```
 '/api/users?event_id=2'
 '/api/events?user_id=2&presenter_id=1'
 ```
+
+POST, PUT and DELETE requests
+```
+'api/:table_name' // POST
+'api/:table_name/:id' // PUT, DELETE
+** Requires JWT authentication
+** returns json {success: true/false}
+```
+
 ## Notes
 * SQL queries are parameterised to prevent SQL injection.
 * Routes are dynamic, based on tables available in Postgres database

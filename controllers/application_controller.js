@@ -38,7 +38,7 @@ module.exports = function(app,passport,pg,config){
       client.query(query, function (err, result) {
         if(!err && result.rows.length > 0) {
           if (result.rows[0].password_digest === req.body.password) {
-            console.log(result.rows[0]);
+            // console.log(result.rows[0]);
             var token = jwt.encode(result.rows[0], 'secret');
             res.json({success: true, token: token});
           }

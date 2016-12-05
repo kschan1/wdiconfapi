@@ -19,7 +19,7 @@ $('form').submit(function(event) {
   });
 });
 
-$('.check').click(function(event) {
+$('.check').on('click', function(event) {
   event.preventDefault();
   var auth = "";
   if ("token" in sessionStorage) {
@@ -32,6 +32,27 @@ $('.check').click(function(event) {
         authorization: auth
     },
     data: {}
+  }).done( function(result) {
+    console.log(result);
+  });
+});
+
+$('.delete').on('click', function(event) {
+  event.preventDefault();
+  var auth = "";
+  if ("token" in sessionStorage) {
+    auth = 'Bearer ' + sessionStorage.token;
+  }
+  $.ajax({
+    url: "/api/venues",
+    method: "post",
+    headers: {
+        authorization: auth
+    },
+    data: {
+      name: "asdf",
+      address: "earth"
+    }
   }).done( function(result) {
     console.log(result);
   });

@@ -178,14 +178,15 @@ module.exports = function Request(query,table) {
       client.query(request.sql_query, request.param_values, function (err, result) {
         if(err) {
           res.send("Request failed");
+          client.end();
         }
         else {
           res.render(ejs,{
             table: request.table,
             items: result.rows
           });
+          client.end();
         }
-        client.end();
       });
     });
   };
@@ -198,34 +199,82 @@ module.exports = function Request(query,table) {
       client.query(request.sql_query, request.param_values, function (err, result) {
         if(err) {
           res.send("Request failed");
+          client.end();
         }
         else {
           res.redirect(route);
+          client.end();
         }
+      });
+    });
+  };
+
+  // Execute the SQL string and redirect to a specified route
+  this.ajax = function(pg,config,res) {
+    console.log("hi");
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(request.sql_query, request.param_values, function (err, result) {
+        console.log(result);
+        if(!err && result.rowCount > 0) {
+          res.json({success: true});
+          client.end();
+          return;
+        }
+        res.json({success: false});
         client.end();
       });
     });
   };
 
   // For deletion, to delete one relation before deleting the item
-  this.two_queries_sql = function(sql_query,route,pg,config,res) {
+  this.two_queries_redirect = function(sql_query,route,pg,config,res) {
     var request = this;
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(sql_query, function (err, result) {
         request.redirect(route,pg,config,res);
+        client.end();
       });
     });
   };
 
   // For deletion, to delete two relations before deleting the item
-  this.three_queries_sql = function(sql_query,sql_query2,route,pg,config,res) {
+  this.three_queries_redirect = function(sql_query,sql_query2,route,pg,config,res) {
     var request = this;
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(sql_query, function (err, result) {
         client.query(sql_query2, function (err, result) {
           request.redirect(route,pg,config,res);
+          client.end();
+        });
+      });
+    });
+  };
+
+  // For deletion, to delete one relation before deleting the item
+  this.two_queries_ajax = function(sql_query,pg,config,res) {
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        request.ajax(pg,config,res);
+        client.end();
+      });
+    });
+  };
+
+  // For deletion, to delete two relations before deleting the item
+  this.three_queries_ajax = function(sql_query,sql_query2,pg,config,res) {
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        client.query(sql_query2, function (err, result) {
+          request.ajax(pg,config,res);
+          client.end();
         });
       });
     });
