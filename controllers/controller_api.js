@@ -5,7 +5,7 @@ module.exports = function(app,pg,config,tables){
   // GET '/api'
   app.get('/api', function(req, res) {
     res.json({
-      table_names: Object.keys(table),
+      table_names: Object.keys(tables),
       table_content: tables
     });
   });
