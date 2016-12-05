@@ -60,10 +60,10 @@ module.exports = function(app,passport,pg,config){
       var token = req.headers.authorization.split(' ')[1];
       var decodedtoken = jwt.decode(token, 'secret');
       console.log(decodedtoken);
-      return res.json({success: true, msg: 'hello '+ decodedtoken.first_name});
+      return res.json({success: true, msg: 'Hello '+ decodedtoken.first_name});
     }
     else {
-      return res.json({success:false, msg: 'No header'});
+      return res.json({success:false, msg: 'Not logged in.'});
     }
   });
 

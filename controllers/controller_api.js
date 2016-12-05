@@ -137,5 +137,5 @@ function isLoggedIn(req, res, next) {
   }
 
   // if they aren't redirect them to the home page
-  res.json({success: false});
+  res.json({success: false, msg: 'Not logged in.'});
 }

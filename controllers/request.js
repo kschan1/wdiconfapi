@@ -178,15 +178,14 @@ module.exports = function Request(query,table) {
       client.query(request.sql_query, request.param_values, function (err, result) {
         if(err) {
           res.send("Request failed");
-          client.end();
         }
         else {
           res.render(ejs,{
             table: request.table,
             items: result.rows
           });
-          client.end();
         }
+        client.end();
       });
     });
   };
@@ -199,12 +198,11 @@ module.exports = function Request(query,table) {
       client.query(request.sql_query, request.param_values, function (err, result) {
         if(err) {
           res.send("Request failed");
-          client.end();
         }
         else {
           res.redirect(route);
-          client.end();
         }
+        client.end();
       });
     });
   };
@@ -219,10 +217,11 @@ module.exports = function Request(query,table) {
         console.log(result);
         if(!err && result.rowCount > 0) {
           res.json({success: true});
-          client.end();
           return;
         }
-        res.json({success: false});
+        else {
+          res.json({success: false});
+        }
         client.end();
       });
     });

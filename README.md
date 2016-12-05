@@ -20,9 +20,14 @@ Search API built for WDI Conf App
 
 ## Routes
 
-HTML pages for accessing tables
+Login page for accessing tables
 ```
-'/tables'
+'/'
+```
+
+JWT test page
+```
+'/signin'
 ```
 
 API routes:
