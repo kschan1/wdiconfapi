@@ -1,5 +1,5 @@
 # WDI Conf API
-[http://wdiconfapi.herokuapp.com/api](http://wdiconfapi.herokuapp.com/api)
+[http://wdiconfapi.herokuapp.com](http://wdiconfapi.herokuapp.com)
 
 ## Technologies used
 HTML, CSS, Javascript, NodeJS, Express, pg, Postgres, jwt-simple
@@ -20,7 +20,7 @@ Search API built for WDI Conf App
 
 ## Routes
 
-Login page for accessing tables
+Login page for manually updating tables
 ```
 '/'
 ```
@@ -53,6 +53,10 @@ Relational tables:
 
 valid params
 ```
+for routes:
+'/api/:table_name'
+'/tables/:table_name' // Requires admin login
+
 ':column_name' = searches for value equals to. requires entire value to match. valid for all columns
 'q' = searches within all string in table for match
 'time_from' = all results after and including specified time
@@ -62,7 +66,7 @@ valid params
 'sort' = sort results using one of the valid columns
 'order' = sort using 'asc' or 'desc' // Default is 'asc'
 ':relational_data' = searched for values equals to.
-  list of relational data:
+  list of relational data for tables below:
   - events: 'presenter_id', 'user_id'
   - presenters: 'event_id'
   - users: 'event_id'
