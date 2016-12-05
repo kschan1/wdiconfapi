@@ -1,20 +1,20 @@
 var Request = require('./request.js');
 
-module.exports = function(app,pg,config,table){
+module.exports = function(app,pg,config,tables){
 
   // GET '/api'
   app.get('/api', function(req, res) {
     res.json({
-      table_names: Object.keys(table),
-      table_content: table
+      table_names: Object.keys(tables),
+      table_content: tables
     });
   });
 
   // GET '/api/#table.name'
   app.get('/api/:table_name', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/api');
-    var request = new Request(req.query,table[table_name]);
+    if (!(table_name in tables)) res.redirect('/api');
+    var request = new Request(req.query,tables[table_name]);
 
     switch(table_name) {
     case 'events':
@@ -57,9 +57,9 @@ module.exports = function(app,pg,config,table){
   // GET '/api/#table.name/:id'
   app.get('/api/:table_name/:id', function(req, res) {
     var table_name = req.params.table_name;
-    if (!(table_name in table)) res.redirect('/api');
+    if (!(table_name in tables)) res.redirect('/api');
     var query = {id: req.params.id};
-    var request = new Request(query,table[table_name]);
+    var request = new Request(query,tables[table_name]);
     request.build_sql();
     request.send_json(pg,config,res);
   });

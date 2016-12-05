@@ -49,7 +49,8 @@ CREATE TABLE Users (
   email VARCHAR(255),
   username VARCHAR(255),
   password_digest VARCHAR(255),
-  image_url TEXT
+  image_url TEXT,
+  admin BOOLEAN
 );
 
 CREATE TABLE Events_Users (
@@ -134,22 +135,32 @@ VALUES
 INSERT INTO Events_Presenters(event_id, presenter_id)
 VALUES (1, 1), (1, 2), (2, 2);
 
-INSERT INTO Users(first_name, last_name, email, username, password_digest, image_url)
+INSERT INTO Users(first_name, last_name, email, username, password_digest, image_url,admin)
 VALUES
 (
+  'admin',
+  'admin',
+  'admin',
+  'admin',
+  'admin',
+  'http://placehold.it/150x150',
+  'true'
+), (
   'Chaz',
   'Pereira',
   'chaz@gmail.com',
   'chazzy',
   'chazzy',
-  'http://placehold.it/150x150'
+  'http://placehold.it/150x150',
+  'true'
 ), (
   'Tim',
   'Timmy',
   'tim@gmail.com',
   'timmy',
   'timmy',
-  'http://placehold.it/150x150'
+  'http://placehold.it/150x150',
+  'false'
 );
 
 

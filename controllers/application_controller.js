@@ -1,24 +1,28 @@
 var jwt = require('jwt-simple');
 var Table = require('./table.js');
 
-module.exports = function(app,pg,config){
+module.exports = function(app,passport,pg,config){
 
-  // get information of all table available in postgres database and store them in table objects
-  var ignore = ['password_digest'];
+  // show the login form
+  app.get('/', function(req, res) {
 
-  var table = {};
-  var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name";
-  var client = new pg.Client(config);
-  client.connect(function (err) {
-    client.query(sql_query, function (err, result) {
-      if (err) throw err;
-      result.rows.forEach(function(row) {
-        table[row.table_name] = new Table(row.table_name,ignore);
-        table[row.table_name].get_columns(pg,config);
-      });
-      client.end();
-    });
+    // render the page and pass in any flash data if it exists
+    res.render('login', { message: req.flash('loginMessage') }); 
   });
+
+  // process the login form
+  app.post('/login', passport.authenticate('local-login', {
+    successRedirect : '/tables', // redirect to the secure profile section
+    failureRedirect : '/', // redirect back to the signup page if there is an error
+    failureFlash : true // allow flash messages
+  }));
+
+  app.get('/logout', function(req, res) {
+    req.logout();
+    res.redirect('/');
+  });
+
+  // JWT Stuff
 
   app.get('/signin', function(req, res) {
     res.render('signin');
@@ -59,7 +63,36 @@ module.exports = function(app,pg,config){
     }
   });
 
-  require('./controller_api')(app,pg,config,table);
-  require('./controller')(app,pg,config,table);
 
+  // get information of all table available in postgres database and store them in table objects
+  var ignore = ['password_digest'];
+
+  var tables = {};
+  var sql_query = "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name";
+  var client = new pg.Client(config);
+  client.connect(function (err) {
+    client.query(sql_query, function (err, result) {
+      if (err) throw err;
+      result.rows.forEach(function(row) {
+        tables[row.table_name] = new Table(row.table_name,ignore);
+        tables[row.table_name].get_columns(pg,config);
+      });
+      client.end();
+    });
+  });
+
+  // Table routes
+  require('./controller_api')(app,pg,config,tables);
+  require('./controller_tables')(app,pg,config,tables,passport);
 };
+
+// route middleware to make sure a user is logged in
+function isLoggedIn(req, res, next) {
+
+  // if user is authenticated in the session, carry on 
+  if (req.isAuthenticated())
+    return next();
+
+  // if they aren't redirect them to the home page
+  res.redirect('/');
+}

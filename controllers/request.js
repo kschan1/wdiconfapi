@@ -1,5 +1,4 @@
 module.exports = function Request(query,table) {
-
   this.query = query;
   this.table = table;
 
@@ -71,11 +70,49 @@ module.exports = function Request(query,table) {
     }
   };
 
+  // Add sort column name and order into SQL query string
+  this.add_range = function() {
+    var request = this;
+    if (!!request.query.time_from) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'time' ) {
+          request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.time_from);
+        }
+      });
+    }
+    if (!!request.query.time_to) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'time' ) {
+          request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.time_to);
+        }
+      });
+    }
+    if (!!request.query.date_from) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'date' ) {
+          request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.date_from);
+        }
+      });
+    }
+    if (!!request.query.date_to) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'date' ) {
+          request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.date_to);
+        }
+      });
+    }
+  };
+
   // Add all conditions into the sql query string
   this.build_sql = function() {
     var request = this;
     request.add_column_keys();
     request.add_search();
+    request.add_range();
     if (request.conditions.length > 0) {
       request.sql_query += " WHERE " + request.conditions.join(" AND ");
     }

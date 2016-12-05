@@ -15,6 +15,11 @@
 
     <h1><span class="fa fa-sign-in"></span> Login</h1>
 
+    <!-- show any messages that come back with authentication -->
+    <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    <% } %>
+
     <!-- LOGIN FORM -->
     <form action="/login" method="post">
         <div class="form-group">
@@ -29,13 +34,8 @@
         <button type="submit" class="btn btn-warning btn-lg">Login</button>
     </form>
 
-    <br>
-    <a class="check" href="/"><button class="btn btn-success btn-lg">Check</button></a>
-
 </div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-<script src="jwt.js"></script>
 </body>
 </html>
