@@ -36,15 +36,18 @@ module.exports = function(app,passport,pg,config){
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(query, function (err, result) {
-        if(!err) {
+        if(!err && result.rows.length > 0) {
           if (result.rows[0].password_digest === req.body.password) {
             console.log(result.rows[0]);
             var token = jwt.encode(result.rows[0], 'secret');
             res.json({success: true, token: token});
           }
           else {
-            res.status(403).send({success: false, msg: 'Authenticaton failed, wrong password.'});
+            res.json({success: false, msg: 'Authenticaton failed, wrong password.'});
           }
+        }
+        else {
+          res.json({success: false, msg: 'Authenticaton failed, invalid username.'});
         }
         client.end();
       });
@@ -53,6 +56,7 @@ module.exports = function(app,passport,pg,config){
 
   app.get('/getinfo', function(req, res) {
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
+      console.log(req.headers.authorization);
       var token = req.headers.authorization.split(' ')[1];
       var decodedtoken = jwt.decode(token, 'secret');
       console.log(decodedtoken);

@@ -12,17 +12,24 @@ $('form').submit(function(event) {
   }).done( function(result) {
     console.log(result);
     console.log(result.token);
-    sessionStorage.token = result.token;
+    if (result.success) {
+      sessionStorage.token = result.token;
+    }
+    
   });
 });
 
 $('.check').click(function(event) {
   event.preventDefault();
+  var auth = "";
+  if ("token" in sessionStorage) {
+    auth = 'Bearer ' + sessionStorage.token;
+  }
   $.ajax({
     url: "/getinfo",
     method: "get",
     headers: {
-        authorization: 'Bearer ' + sessionStorage.token
+        authorization: auth
     },
     data: {}
   }).done( function(result) {
