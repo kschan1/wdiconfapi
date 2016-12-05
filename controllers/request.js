@@ -209,12 +209,10 @@ module.exports = function Request(query,table) {
 
   // Execute the SQL string and redirect to a specified route
   this.ajax = function(pg,config,res) {
-    console.log("hi");
     var request = this;
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(request.sql_query, request.param_values, function (err, result) {
-        console.log(result);
         if(!err && result.rowCount > 0) {
           res.json({success: true});
           return;

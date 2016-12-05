@@ -19,8 +19,17 @@ $('form').submit(function(event) {
   });
 });
 
+$('.signout').on('click', function(event) {
+  if ("token" in sessionStorage) {
+    delete sessionStorage.token;
+    console.log({success: true, msg: "Logged out"});
+  }
+  else {
+    console.log({success: false, msg: "Not logged in"});
+  }
+});
+
 $('.check').on('click', function(event) {
-  event.preventDefault();
   var auth = "";
   if ("token" in sessionStorage) {
     auth = 'Bearer ' + sessionStorage.token;
@@ -37,8 +46,7 @@ $('.check').on('click', function(event) {
   });
 });
 
-$('.delete').on('click', function(event) {
-  event.preventDefault();
+$('.create').on('click', function(event) {
   var auth = "";
   if ("token" in sessionStorage) {
     auth = 'Bearer ' + sessionStorage.token;

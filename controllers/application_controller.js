@@ -30,12 +30,12 @@ module.exports = function(app,passport,pg,config){
 
   app.post('/authenticate', function(req, res) {
     // SQL query string
-    var query = "SELECT * FROM Users WHERE email='" + req.body.email + "'";
+    var query = "SELECT * FROM Users WHERE email=$1";
 
     // Retrieve data from Postgres and sent response to client
     var client = new pg.Client(config);
     client.connect(function (err) {
-      client.query(query, function (err, result) {
+      client.query(query, [req.body.email], function (err, result) {
         if(!err && result.rows.length > 0) {
           if (result.rows[0].password_digest === req.body.password) {
             // console.log(result.rows[0]);
@@ -56,10 +56,10 @@ module.exports = function(app,passport,pg,config){
 
   app.get('/getinfo', function(req, res) {
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
-      console.log(req.headers.authorization);
+      // console.log(req.headers.authorization);
       var token = req.headers.authorization.split(' ')[1];
       var decodedtoken = jwt.decode(token, 'secret');
-      console.log(decodedtoken);
+      // console.log(decodedtoken);
       return res.json({success: true, msg: 'Hello '+ decodedtoken.first_name});
     }
     else {
