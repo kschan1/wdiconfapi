@@ -5,16 +5,17 @@
   <title>Document</title>
 </head>
 <body>
-  <h1><a href="/all">all tables</a></h1>
-  <h2><a href="/<%= table.name %>"><%= table.name %></a></h1>
-  <h3><a href="/<%= table.name %>">Back</a></h3>
+  <p><a href="/logout">logout</a></p>
+  <h1><a href="/tables">all tables</a></h1>
+  <h2><a href="/tables/<%= table.name %>"><%= table.name %></a></h1>
+  <h3><a href="/tables/<%= table.name %>">Back</a></h3>
   <hr>
   <% items.forEach(function(item) { %>
     <% for (var key in item) { %>
       <p><%= key %>: <%= item[key] %></p>
     <% } %>
-    <a href="/<%= table.name %>/<%= item.id %>/edit"><button>Edit</button></a>
-    <form action="/<%= table.name %>/<%= item.id %>" method="post">
+    <a href="/tables/<%= table.name %>/<%= item.id %>/edit"><button>Edit</button></a>
+    <form action="/tables/<%= table.name %>/<%= item.id %>" method="post">
       <input type="hidden" name="_method" value="delete">
       <button>Delete</button>
     </form>

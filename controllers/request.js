@@ -1,5 +1,4 @@
 module.exports = function Request(query,table) {
-
   this.query = query;
   this.table = table;
 
