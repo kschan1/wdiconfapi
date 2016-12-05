@@ -75,7 +75,7 @@ module.exports = function Request(query,table) {
     var request = this;
     if (!!request.query.time_from) {
       request.table.columns.forEach(function(column) {
-        if ( column.data_type.includes('time') ) {
+        if ( column.column_name === 'time' ) {
           request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
           request.param_values.push(request.query.time_from);
         }
@@ -83,7 +83,7 @@ module.exports = function Request(query,table) {
     }
     if (!!request.query.time_to) {
       request.table.columns.forEach(function(column) {
-        if ( column.data_type.includes('time') ) {
+        if ( column.column_name === 'time' ) {
           request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
           request.param_values.push(request.query.time_to);
         }
@@ -91,7 +91,7 @@ module.exports = function Request(query,table) {
     }
     if (!!request.query.date_from) {
       request.table.columns.forEach(function(column) {
-        if ( ['date'].includes(column.data_type) ) {
+        if ( column.column_name === 'date' ) {
           request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
           request.param_values.push(request.query.date_from);
         }
@@ -99,7 +99,7 @@ module.exports = function Request(query,table) {
     }
     if (!!request.query.date_to) {
       request.table.columns.forEach(function(column) {
-        if ( ['date'].includes(column.data_type) ) {
+        if ( column.column_name === 'date' ) {
           request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
           request.param_values.push(request.query.date_to);
         }
