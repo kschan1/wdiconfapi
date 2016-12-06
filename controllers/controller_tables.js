@@ -82,7 +82,7 @@ module.exports = function(app,pg,config,tables,passport){
     if (!(table_name in tables)) res.redirect('/tables');
     var request = new Request(req.body,tables[table_name]);
     request.build_sql_post();
-    request.redirect('/' + table_name,pg,config,res);
+    request.redirect('/tables/' + table_name,pg,config,res);
   });
 
   // PUT '/tables/:table_name/:id'
@@ -91,7 +91,7 @@ module.exports = function(app,pg,config,tables,passport){
     if (!(table_name in tables)) res.redirect('/tables');
     var request = new Request(req.body,tables[table_name]);
     request.build_sql_put();
-    var route = '/' + table_name + '/' + req.params.id;
+    var route = '/tables/' + table_name + '/' + req.params.id;
     request.redirect(route,pg,config,res);
   });
 
@@ -107,27 +107,27 @@ module.exports = function(app,pg,config,tables,passport){
       sql_query = "DELETE FROM events_presenters WHERE event_id=" + req.params.id;
       sql_query2 = "DELETE FROM events_users WHERE event_id=" + req.params.id;
       request.build_sql_delete();
-      request.three_queries_sql(sql_query,sql_query2,'/' + table_name,pg,config,res);
+      request.three_queries_redirect(sql_query,sql_query2,'/tables/' + table_name,pg,config,res);
       break;
     case 'presenters':
       sql_query = "DELETE FROM events_presenters WHERE presenter_id=" + req.params.id;
       request.build_sql_delete();
-      request.two_queries_sql(sql_query,'/' + table_name,pg,config,res);
+      request.two_queries_redirect(sql_query,'/tables/' + table_name,pg,config,res);
       break;
     case 'users':
       // SQL query string
       sql_query = "DELETE FROM events_users WHERE user_id=" + req.params.id;
       request.build_sql_delete();
-      request.two_queries_sql(sql_query,'/' + table_name,pg,config,res);
+      request.two_queries_redirect(sql_query,'/tables/' + table_name,pg,config,res);
       break;
     case 'venues':
       sql_query = "UPDATE events SET venue_id=NULL WHERE venue_id=" + req.params.id;
       request.build_sql_delete();
-      request.two_queries_sql(sql_query,'/' + table_name,pg,config,res);
+      request.two_queries_redirect(sql_query,'/tables/' + table_name,pg,config,res);
       break;
     default:
       request.build_sql_delete();
-      request.redirect('/' + table_name,pg,config,res);
+      request.redirect('/tables/' + table_name,pg,config,res);
     }
   });
 
@@ -139,8 +139,9 @@ function isLoggedIn(req, res, next) {
   // console.log(req.headers);
 
   // if user is authenticated in the session, carry on 
-  if (req.isAuthenticated())
+  if (req.isAuthenticated()) {
     return next();
+  }
 
   // if they aren't redirect them to the home page
   res.redirect('/');

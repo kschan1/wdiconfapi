@@ -41,7 +41,7 @@ module.exports = function(passport,pg,config) {
         passReqToCallback : true // allows us to pass back the entire request to the callback
     },
     function(req, email, password, done) { // callback with email and password from our form
-
+        console.log("at least say hi");
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
 
@@ -84,6 +84,8 @@ module.exports = function(passport,pg,config) {
     opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
     passport.use(new JwtStrategy(opts, function(jwt_payload, done){
       
+        console.log("HIHIH");
+
       // SQL query string
       var query = "SELECT * FROM Users WHERE id='" + jwt_payload.id + "'";
 

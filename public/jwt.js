@@ -12,19 +12,55 @@ $('form').submit(function(event) {
   }).done( function(result) {
     console.log(result);
     console.log(result.token);
-    sessionStorage.token = result.token;
+    if (result.success) {
+      sessionStorage.token = result.token;
+    }
+    
   });
 });
 
-$('.check').click(function(event) {
-  event.preventDefault();
+$('.signout').on('click', function(event) {
+  if ("token" in sessionStorage) {
+    delete sessionStorage.token;
+    console.log({success: true, msg: "Logged out"});
+  }
+  else {
+    console.log({success: false, msg: "Not logged in"});
+  }
+});
+
+$('.check').on('click', function(event) {
+  var auth = "";
+  if ("token" in sessionStorage) {
+    auth = 'Bearer ' + sessionStorage.token;
+  }
   $.ajax({
     url: "/getinfo",
     method: "get",
     headers: {
-        authorization: 'Bearer ' + sessionStorage.token
+        authorization: auth
     },
     data: {}
+  }).done( function(result) {
+    console.log(result);
+  });
+});
+
+$('.create').on('click', function(event) {
+  var auth = "";
+  if ("token" in sessionStorage) {
+    auth = 'Bearer ' + sessionStorage.token;
+  }
+  $.ajax({
+    url: "/api/venues",
+    method: "post",
+    headers: {
+        authorization: auth
+    },
+    data: {
+      name: "asdf",
+      address: "earth"
+    }
   }).done( function(result) {
     console.log(result);
   });
