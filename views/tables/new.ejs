@@ -5,11 +5,12 @@
   <title>Document</title>
 </head>
 <body>
-  <h1><a href="/all">all tables</a></h1>
-  <h2><a href="/<%= table.name %>"><%= table.name %></a></h1>
-  <h3><a href="/<%= table.name %>">Back</a></h3>
+  <p><a href="/logout">logout</a></p>
+  <h1><a href="/tables">all tables</a></h1>
+  <h2><a href="/tables/<%= table.name %>"><%= table.name %></a></h1>
+  <h3><a href="/tables/<%= table.name %>">Back</a></h3>
   <hr>
-  <form action="/<%= table.name %>" method="post">
+  <form action="/tables/<%= table.name %>" method="post">
     <input type="hidden" name="_method" value="post">
     <% table.columns.forEach(function(column) { %>
         <% if (column.column_name !== 'id') { %>

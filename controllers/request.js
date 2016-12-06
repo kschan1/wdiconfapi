@@ -1,5 +1,4 @@
 module.exports = function Request(query,table) {
-
   this.query = query;
   this.table = table;
 
@@ -71,11 +70,49 @@ module.exports = function Request(query,table) {
     }
   };
 
+  // Add sort column name and order into SQL query string
+  this.add_range = function() {
+    var request = this;
+    if (!!request.query.time_from) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'time' ) {
+          request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.time_from);
+        }
+      });
+    }
+    if (!!request.query.time_to) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'time' ) {
+          request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.time_to);
+        }
+      });
+    }
+    if (!!request.query.date_from) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'date' ) {
+          request.conditions.push(column.column_name + ">=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.date_from);
+        }
+      });
+    }
+    if (!!request.query.date_to) {
+      request.table.columns.forEach(function(column) {
+        if ( column.column_name === 'date' ) {
+          request.conditions.push(column.column_name + "<=$" + (request.param_values.length + 1));
+          request.param_values.push(request.query.date_to);
+        }
+      });
+    }
+  };
+
   // Add all conditions into the sql query string
   this.build_sql = function() {
     var request = this;
     request.add_column_keys();
     request.add_search();
+    request.add_range();
     if (request.conditions.length > 0) {
       request.sql_query += " WHERE " + request.conditions.join(" AND ");
     }
@@ -170,25 +207,71 @@ module.exports = function Request(query,table) {
     });
   };
 
+  // Execute the SQL string and redirect to a specified route
+  this.ajax = function(pg,config,res) {
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(request.sql_query, request.param_values, function (err, result) {
+        if(!err && result.rowCount > 0) {
+          res.json({success: true});
+          return;
+        }
+        else {
+          res.json({success: false});
+        }
+        client.end();
+      });
+    });
+  };
+
   // For deletion, to delete one relation before deleting the item
-  this.two_queries_sql = function(sql_query,route,pg,config,res) {
+  this.two_queries_redirect = function(sql_query,route,pg,config,res) {
     var request = this;
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(sql_query, function (err, result) {
         request.redirect(route,pg,config,res);
+        client.end();
       });
     });
   };
 
   // For deletion, to delete two relations before deleting the item
-  this.three_queries_sql = function(sql_query,sql_query2,route,pg,config,res) {
+  this.three_queries_redirect = function(sql_query,sql_query2,route,pg,config,res) {
     var request = this;
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(sql_query, function (err, result) {
         client.query(sql_query2, function (err, result) {
           request.redirect(route,pg,config,res);
+          client.end();
+        });
+      });
+    });
+  };
+
+  // For deletion, to delete one relation before deleting the item
+  this.two_queries_ajax = function(sql_query,pg,config,res) {
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        request.ajax(pg,config,res);
+        client.end();
+      });
+    });
+  };
+
+  // For deletion, to delete two relations before deleting the item
+  this.three_queries_ajax = function(sql_query,sql_query2,pg,config,res) {
+    var request = this;
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        client.query(sql_query2, function (err, result) {
+          request.ajax(pg,config,res);
+          client.end();
         });
       });
     });
