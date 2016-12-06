@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Login</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
     <style>
@@ -13,7 +13,12 @@
 
 <div class="col-sm-6 col-sm-offset-3">
 
-    <h1><span class="fa fa-sign-in"></span> JWT Signin</h1>
+    <h1><span class="fa fa-sign-in"></span> Login</h1>
+
+    <!-- show any messages that come back with authentication -->
+    <% if (message.length > 0) { %>
+        <div class="alert alert-danger"><%= message %></div>
+    <% } %>
 
     <!-- LOGIN FORM -->
     <form action="/login" method="post">
@@ -26,20 +31,11 @@
             <input type="password" class="form-control" name="password">
         </div>
 
-        <button type="submit" class="btn btn-warning btn-lg">Signin</button>
+        <button type="submit" class="btn btn-warning btn-lg">Login</button>
     </form>
 
-    <br>
-    <button class="signout btn btn-danger btn-lg">Signout</button>
-    <br><br>
-    <button class="check btn btn-success btn-lg">Check</button>
-    <br><br>
-    <button class="create btn btn-primary btn-lg">Create</button>
-
 </div>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.1.1.js"></script>
-<script src="jwt.js"></script>
 </body>
 </html>

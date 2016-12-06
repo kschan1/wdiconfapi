@@ -9,10 +9,11 @@ module.exports = function Table(table_name, ignore) {
     var client = new pg.Client(config);
     client.connect(function (err) {
       client.query(sql_query, [that.name], function (err, result) {
-        if (err) throw err;
-        that.columns = result.rows.filter(function(row) {
-          return !ignore.includes(row.column_name);
-        });
+        if (!err) {
+          that.columns = result.rows.filter(function(row) {
+            return !ignore.includes(row.column_name);
+          });
+        }
         client.end();
       });
     });
