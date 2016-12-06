@@ -58,9 +58,9 @@ module.exports = function(app,passport,pg,config){
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
       // console.log(req.headers.authorization);
       var token = req.headers.authorization.split(' ')[1];
-      var decodedtoken = jwt.decode(token, 'secret');
-      // console.log(decodedtoken);
-      return res.json({success: true, msg: 'Hello '+ decodedtoken.first_name});
+      var user = jwt.decode(token, 'secret');
+      delete user.password_digest;
+      return res.json({success: true, user: user});
     }
     else {
       return res.json({success:false, msg: 'Not logged in.'});
