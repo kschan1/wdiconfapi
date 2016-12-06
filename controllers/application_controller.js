@@ -1,5 +1,6 @@
 var jwt = require('jwt-simple');
 var Table = require('./table.js');
+var stripe = require("stripe")(process.env.STRIPE_TEST_SK);
 
 module.exports = function(app,pg,config){
 
@@ -57,6 +58,34 @@ module.exports = function(app,pg,config){
     else {
       return res.json({success:false, msg: 'No header'});
     }
+  });
+
+  // page for payment
+  app.get('/payment', function(req, res) {
+    res.render('payment');
+  });
+
+  // route for processing payment
+  app.post('/payment', function(req, res) {
+    // Get the credit card details submitted by the form
+    var token = req.body.stripeToken;
+
+    // Create a charge: this will charge the user's card
+    var charge = stripe.charges.create({
+      amount: 1000, // Amount in cents
+      currency: "aud",
+      source: token,
+      description: "Example charge"
+    }, function(err, charge) {
+      if (err && err.type === 'StripeCardError') {
+        // The card has been declined
+        console.log('payment declined');
+      }
+      else {
+        console.log('payment successful');
+        res.redirect('/all');
+      }
+    });
   });
 
   require('./controller_api')(app,pg,config,table);

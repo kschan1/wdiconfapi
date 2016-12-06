@@ -16,7 +16,6 @@ if (typeof process.env.DATABASE_URL !== 'undefined') {
   pg.defaults.ssl = true;
 }
 
-
 // Express.js
 
 var express = require('express');
@@ -45,6 +44,9 @@ app.use(methodOverride(function (req, res) {
 }));
 app.use(express.static(__dirname + '/public'));
 
+// Global
+app.locals.stripeTestPK = process.env.STRIPE_TEST_PK;
+
 // Controller
 require('./controllers/application_controller')(app,pg,config);
 
@@ -59,7 +61,7 @@ var  opts = {};
 opts.secretOrKey = 'secret';
 opts.jwtFromRequest = ExtractJwt.fromAuthHeader();
 passport.use(new JwtStrategy(opts, function(jwt_payload, done){
-  
+
   // SQL query string
   var query = "SELECT * FROM Users WHERE id='" + jwt_payload.id + "'";
 
