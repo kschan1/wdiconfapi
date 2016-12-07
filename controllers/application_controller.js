@@ -73,6 +73,7 @@ module.exports = function(app,passport,pg,config){
   });
 
   app.post('/authenticate', function(req, res) {
+    var post_res = res;
     // SQL query string
     var query = "SELECT * FROM Users WHERE email=$1";
 
@@ -81,8 +82,8 @@ module.exports = function(app,passport,pg,config){
     client.connect(function (err) {
       client.query(query, [req.body.email], function (err, result) {
         if(!err && result.rows.length > 0) {
-          bcrypt.compare(req.body.password, result.rows[0].password_digest, function(err, res) {
-            if (res) {
+          bcrypt.compare(req.body.password, result.rows[0].password_digest, function(err, verified) {
+            if (verified) {
               // console.log(result.rows[0]);
               var token = jwt.encode(result.rows[0], 'secret');
               res.json({success: true, token: token});
