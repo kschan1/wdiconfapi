@@ -68,6 +68,31 @@ module.exports = function(app,passport,pg,config){
     }
   });
 
+  // check for ticket purchase
+  app.get('/checkforticket', function(req, res) {
+    var token = req.headers.authorization.split(' ')[1];
+    var decodedtoken = jwt.decode(token, 'secret');
+
+    var sql_query = "SELECT * FROM tickets WHERE user_id = " + decodedtoken.id
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        if (err) {
+          throw err;
+        }
+        if (result.rows.length === 0 ) {
+          return res.json({ticket: false});
+        }
+        else {
+          return res.json({ticket: true, ticketNumber: result.rows[0].ticket_number});
+        }
+        client.end();
+      });
+    });
+
+
+  });
+
   // page for payment
   app.get('/payment', function(req, res) {
     res.render('payment');
