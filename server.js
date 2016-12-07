@@ -17,6 +17,9 @@ if (typeof process.env.DATABASE_URL !== 'undefined') {
   pg.defaults.ssl = true;
 }
 
+// Global
+app.locals.stripeTestPK = process.env.STRIPE_TEST_PK;
+
 app.use(express.static(__dirname + '/public'));
 
 // Express middleware
@@ -38,10 +41,10 @@ app.set('view engine', 'ejs');
 
 // Express middleware: for passport
 app.use(flash());
-app.use(session({ 
+app.use(session({
   secret: 'secret',
   resave: false,
-  saveUninitialized: true 
+  saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -58,4 +61,3 @@ require('./controllers/application_controller')(app,passport,pg,configDB);
 
 // Passport
 require('./config/passport')(passport,pg,configDB); // pass passport for configuration
-

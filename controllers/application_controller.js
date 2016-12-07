@@ -2,6 +2,7 @@ var jwt = require('jwt-simple');
 var Table = require('./table.js');
 var bcrypt = require('bcrypt');
 var saltRounds = 10;
+var stripe = require("stripe")(process.env.STRIPE_TEST_SK);
 
 module.exports = function(app,passport,pg,config){
 
@@ -9,7 +10,7 @@ module.exports = function(app,passport,pg,config){
   app.get('/', function(req, res) {
 
     // render the page and pass in any flash data if it exists
-    res.render('login', { message: req.flash('loginMessage') }); 
+    res.render('login', { message: req.flash('loginMessage') });
   });
 
   // process the login form
@@ -114,6 +115,76 @@ module.exports = function(app,passport,pg,config){
     }
   });
 
+  // check for ticket purchase
+  app.get('/checkforticket', function(req, res) {
+    var token = req.headers.authorization.split(' ')[1];
+    var decodedtoken = jwt.decode(token, 'secret');
+
+    var sql_query = "SELECT * FROM tickets WHERE user_id = " + decodedtoken.id
+    var client = new pg.Client(config);
+    client.connect(function (err) {
+      client.query(sql_query, function (err, result) {
+        if (err) {
+          throw err;
+        }
+        if (result.rows.length === 0 ) {
+          return res.json({ticket: false});
+        }
+        else {
+          return res.json({ticket: true, ticketNumber: result.rows[0].ticket_number});
+        }
+        client.end();
+      });
+    });
+
+
+  });
+
+  // page for payment
+  app.get('/payment', function(req, res) {
+    res.render('payment');
+  });
+
+  // route for processing payment
+  app.post('/payment', function(req, res) {
+    // Get the credit card details submitted by the form
+    console.log(req.body);
+    console.log(req.headers);
+    var token = req.body.stripeToken;
+
+    // Create a charge: this will charge the user's card
+    var charge = stripe.charges.create({
+      amount: 1000, // Amount in cents
+      currency: "aud",
+      source: token,
+      description: "Example charge"
+    }, function(err, charge) {
+      if (err && err.type === 'StripeCardError') {
+        return res.json({success:false, msg: 'Declined'});
+
+      }
+      else {
+        var token = req.headers.authorization.split(' ')[1];
+        var decodedtoken = jwt.decode(token, 'secret');
+        var min = 100000;
+        var max = 999999;
+        var ticketNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        var sql_query = "INSERT INTO Tickets(ticket_number, user_id) VALUES (" + ticketNumber + ", " + decodedtoken.id + ");"
+        var client = new pg.Client(config);
+        client.connect(function (err) {
+          client.query(sql_query, function (err, result) {
+            if (err)  {
+              console.log(err)
+              throw err;
+            }
+            client.end();
+          });
+        });
+
+        return res.json({success:true, msg: 'Success'});
+      }
+    });
+  });
 
   // get information of all table available in postgres database and store them in table objects
   var ignore = ['password_digest'];
@@ -140,7 +211,7 @@ module.exports = function(app,passport,pg,config){
 // route middleware to make sure a user is logged in
 function isLoggedIn(req, res, next) {
 
-  // if user is authenticated in the session, carry on 
+  // if user is authenticated in the session, carry on
   if (req.isAuthenticated())
     return next();
 
