@@ -76,6 +76,8 @@ module.exports = function(app,passport,pg,config){
   // route for processing payment
   app.post('/payment', function(req, res) {
     // Get the credit card details submitted by the form
+    console.log(req.body);
+    console.log(req.headers);
     var token = req.body.stripeToken;
 
     // Create a charge: this will charge the user's card
@@ -86,12 +88,28 @@ module.exports = function(app,passport,pg,config){
       description: "Example charge"
     }, function(err, charge) {
       if (err && err.type === 'StripeCardError') {
-        // The card has been declined
-        console.log('payment declined');
+        return res.json({success:false, msg: 'Declined'});
+
       }
       else {
-        console.log('payment successful');
-        res.redirect('/');
+        var token = req.headers.authorization.split(' ')[1];
+        var decodedtoken = jwt.decode(token, 'secret');
+        var min = 100000;
+        var max = 999999;
+        var ticketNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+        var sql_query = "INSERT INTO Tickets(ticket_number, user_id) VALUES (" + ticketNumber + ", " + decodedtoken.id + ");"
+        var client = new pg.Client(config);
+        client.connect(function (err) {
+          client.query(sql_query, function (err, result) {
+            if (err)  {
+              console.log(err)
+              throw err;
+            }
+            client.end();
+          });
+        });
+
+        return res.json({success:true, msg: 'Success'});
       }
     });
   });

@@ -59,6 +59,12 @@ CREATE TABLE Events_Users (
   user_id INT references Users(id)
 );
 
+CREATE TABLE Tickets (
+  id SERIAL PRIMARY KEY,
+  ticket_number INT,
+  user_id INT references Users(id)
+);
+
 -- Seed files
 
 INSERT INTO Venues(name, address, image_url)
