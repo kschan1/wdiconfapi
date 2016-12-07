@@ -1,5 +1,7 @@
 var jwt = require('jwt-simple');
 var Table = require('./table.js');
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
 
 module.exports = function(app,passport,pg,config){
 
@@ -26,6 +28,48 @@ module.exports = function(app,passport,pg,config){
 
   app.get('/signin', function(req, res) {
     res.render('signin');
+  });
+
+  app.post('/signup', function(req, res) {
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      var password_digest = hash;
+    
+      column_keys = [
+        'first_name',
+        'last_name',
+        'email',
+        'password_digest'
+      ];
+
+      var param_values = [
+        req.body.first_name,
+        req.body.last_name,
+        req.body.email,
+        password_digest
+      ];
+
+      var sql_query = "INSERT INTO Users (" + column_keys.join(", ") + ") VALUES ($1, $2, $3, $4)";
+
+      // console.log(sql_query);
+      // console.log(param_values);
+      // console.log(req.body);
+
+      // Retrieve data from Postgres and sent response to client
+      var client = new pg.Client(config);
+      client.connect(function (err) {
+        client.query(sql_query, param_values, function (err, result) {
+          // console.log("err = " + err);
+          // console.log(result);
+          if(err) {
+            res.json({success: false, msg: 'Sign up failed.', err: err});
+          }
+          else {
+            res.json({success: true, msg: 'Redirect to profile.'});
+          }
+          client.end();
+        });
+      });      
+    });
   });
 
   app.post('/authenticate', function(req, res) {

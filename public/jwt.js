@@ -1,13 +1,13 @@
 console.log("hello world");
 
-$('form').submit(function(event) {
+$('form.login').submit(function(event) {
   event.preventDefault();
   $.ajax({
     url: "/authenticate",
     method: "post",
     data: {
-      email: $('form input:eq(0)').val(),
-      password: $('form input:eq(1)').val()
+      email: $('form.login input:eq(0)').val(),
+      password: $('form.login input:eq(1)').val()
     }
   }).done( function(result) {
     console.log(result);
@@ -46,22 +46,22 @@ $('.check').on('click', function(event) {
   });
 });
 
-$('.create').on('click', function(event) {
-  var auth = "";
-  if ("token" in sessionStorage) {
-    auth = 'Bearer ' + sessionStorage.token;
-  }
+$('form.signup').submit(function(event) {
+  event.preventDefault();
   $.ajax({
-    url: "/api/venues",
+    url: "/signup",
     method: "post",
-    headers: {
-        authorization: auth
-    },
     data: {
-      name: "asdf",
-      address: "earth"
+      first_name: $('form.signup input:eq(0)').val(),
+      last_name: $('form.signup input:eq(1)').val(),
+      email: $('form.signup input:eq(2)').val(),
+      password: $('form.signup input:eq(3)').val()
     }
   }).done( function(result) {
     console.log(result);
+    if (result.success) {
+      sessionStorage.token = result.token;
+    }
+    
   });
 });
