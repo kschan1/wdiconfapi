@@ -81,14 +81,16 @@ module.exports = function(app,passport,pg,config){
     client.connect(function (err) {
       client.query(query, [req.body.email], function (err, result) {
         if(!err && result.rows.length > 0) {
-          if (result.rows[0].password_digest === req.body.password) {
-            // console.log(result.rows[0]);
-            var token = jwt.encode(result.rows[0], 'secret');
-            res.json({success: true, token: token});
-          }
-          else {
-            res.json({success: false, msg: 'Authenticaton failed, wrong password.'});
-          }
+          bcrypt.compare(req.body.password, result.rows[0].password_digest, function(err, res) {
+            if (res) {
+              // console.log(result.rows[0]);
+              var token = jwt.encode(result.rows[0], 'secret');
+              res.json({success: true, token: token});
+            }
+            else {
+              res.json({success: false, msg: 'Authenticaton failed, wrong password.'});
+            }
+          });
         }
         else {
           res.json({success: false, msg: 'Authenticaton failed, invalid username.'});
