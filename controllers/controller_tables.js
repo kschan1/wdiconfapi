@@ -117,8 +117,9 @@ module.exports = function(app,pg,config,tables,passport){
     case 'users':
       // SQL query string
       sql_query = "DELETE FROM events_users WHERE user_id=" + req.params.id;
+      sql_query2 = "DELETE FROM tickets WHERE user_id=" + req.params.id;
       request.build_sql_delete();
-      request.two_queries_redirect(sql_query,'/tables/' + table_name,pg,config,res);
+      request.three_queries_redirect(sql_query,sql_query2,'/tables/' + table_name,pg,config,res);
       break;
     case 'venues':
       sql_query = "UPDATE events SET venue_id=NULL WHERE venue_id=" + req.params.id;
