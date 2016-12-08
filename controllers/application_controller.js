@@ -51,7 +51,7 @@ module.exports = function(app,passport,pg,config){
         'http://placehold.it/150x150'
       ];
 
-      var sql_query = "INSERT INTO Users (" + column_keys.join(", ") + ") VALUES ($1, $2, $3, $4)";
+      var sql_query = "INSERT INTO Users (" + column_keys.join(", ") + ") VALUES ($1, $2, $3, $4, $5)";
 
       // console.log(sql_query);
       // console.log(param_values);
