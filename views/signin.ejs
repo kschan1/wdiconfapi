@@ -16,7 +16,7 @@
     <h1><span class="fa fa-sign-in"></span> JWT Signin</h1>
 
     <!-- LOGIN FORM -->
-    <form action="/login" method="post">
+    <form class="login" action="/login" method="post">
         <div class="form-group">
             <label>Email</label>
             <input type="text" class="form-control" name="email">
@@ -33,8 +33,33 @@
     <button class="signout btn btn-danger btn-lg">Signout</button>
     <br><br>
     <button class="check btn btn-success btn-lg">Check</button>
+
+    <br><br><br>
+
+    <h1><span class="fa fa-sign-in"></span> Sign up</h1>
+
+    <!-- SIGN UP FORM -->
+    <form class="signup" action="/signup" method="post">
+        <div class="form-group">
+            <label>First name</label>
+            <input type="text" class="form-control" name="first_name">
+        </div>
+        <div class="form-group">
+            <label>Last name</label>
+            <input type="text" class="form-control" name="last_name">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="text" class="form-control" name="email">
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" class="form-control" name="password">
+        </div>
+
+        <button type="submit" class="btn btn-warning btn-lg">Sign up</button>
+    </form>
     <br><br>
-    <button class="create btn btn-primary btn-lg">Create</button>
 
 </div>
 

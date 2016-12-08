@@ -1,5 +1,7 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
 
 // expose this function to our app using module.exports
 module.exports = function(passport,pg,config) {
@@ -61,13 +63,14 @@ module.exports = function(passport,pg,config) {
                 }
                 else {
                     // if the user is found but the password is wrong
-                    if (result.rows[0].password_digest !== password) {
-                        done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-                    }
-                    else {
-                        // all is well, return successful user
-                        done(null, result.rows[0]);
-                    }
+                    bcrypt.compare(password, result.rows[0].password_digest, function(err, verified) {
+                        if (verified) {
+                            done(null, result.rows[0]);
+                        }
+                        else {
+                            done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // 
+                        }
+                    });
                 }
               client.end();
             });

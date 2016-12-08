@@ -57,20 +57,6 @@ module.exports = function Request(query,table) {
   };
 
   // Add sort column name and order into SQL query string
-  this.add_sort = function() {
-    var request = this;
-    if (!!request.query.sort && !!table.find_column(request.query.sort)) {
-      request.sql_query += " ORDER BY " + request.query.sort;
-      if (!!request.query.order) {
-        // Otherwise it will always be ASC
-        if (request.query.order.toLowerCase() === "desc") {
-          request.sql_query += " DESC";
-        }
-      }
-    }
-  };
-
-  // Add sort column name and order into SQL query string
   this.add_range = function() {
     var request = this;
     if (!!request.query.time_from) {
@@ -104,6 +90,29 @@ module.exports = function Request(query,table) {
           request.param_values.push(request.query.date_to);
         }
       });
+    }
+  };
+
+  // Add sort column name and order into SQL query string
+  this.add_sort = function() {
+    var request = this;
+    if (!!request.query.sort && !!table.find_column(request.query.sort)) {
+      request.sql_query += " ORDER BY " + request.query.sort;
+      if (!!request.query.order) {
+        // Otherwise it will always be ASC
+        if (request.query.order.toLowerCase() === "desc") {
+          request.sql_query += " DESC";
+        }
+      }
+      if (request.query.sort === "date") {
+        request.sql_query += ", time";
+        if (!!request.query.order) {
+          // Otherwise it will always be ASC
+          if (request.query.order.toLowerCase() === "desc") {
+            request.sql_query += " DESC";
+          }
+        }
+      }
     }
   };
 

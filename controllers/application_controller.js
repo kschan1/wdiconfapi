@@ -1,5 +1,7 @@
 var jwt = require('jwt-simple');
 var Table = require('./table.js');
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
 var stripe = require("stripe")(process.env.STRIPE_TEST_SK);
 
 module.exports = function(app,passport,pg,config){
@@ -29,7 +31,52 @@ module.exports = function(app,passport,pg,config){
     res.render('signin');
   });
 
+  app.post('/signup', function(req, res) {
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+      var password_digest = hash;
+    
+      column_keys = [
+        'first_name',
+        'last_name',
+        'email',
+        'password_digest',
+        'image_url'
+      ];
+
+      var param_values = [
+        req.body.first_name,
+        req.body.last_name,
+        req.body.email,
+        password_digest,
+        'http://placehold.it/150x150'
+      ];
+
+      var sql_query = "INSERT INTO Users (" + column_keys.join(", ") + ") VALUES ($1, $2, $3, $4, $5)";
+
+      // console.log(sql_query);
+      // console.log(param_values);
+      // console.log(req.body);
+
+      // Retrieve data from Postgres and sent response to client
+      var client = new pg.Client(config);
+      client.connect(function (err) {
+        client.query(sql_query, param_values, function (err, result) {
+          // console.log("err = " + err);
+          // console.log(result);
+          if(err) {
+            res.json({success: false, msg: 'Sign up failed.', err: err});
+          }
+          else {
+            res.json({success: true, msg: 'Redirect to profile.'});
+          }
+          client.end();
+        });
+      });      
+    });
+  });
+
   app.post('/authenticate', function(req, res) {
+    var post_res = res;
     // SQL query string
     var query = "SELECT * FROM Users WHERE email=$1";
 
@@ -38,14 +85,16 @@ module.exports = function(app,passport,pg,config){
     client.connect(function (err) {
       client.query(query, [req.body.email], function (err, result) {
         if(!err && result.rows.length > 0) {
-          if (result.rows[0].password_digest === req.body.password) {
-            // console.log(result.rows[0]);
-            var token = jwt.encode(result.rows[0], 'secret');
-            res.json({success: true, token: token});
-          }
-          else {
-            res.json({success: false, msg: 'Authenticaton failed, wrong password.'});
-          }
+          bcrypt.compare(req.body.password, result.rows[0].password_digest, function(err, verified) {
+            if (verified) {
+              // console.log(result.rows[0]);
+              var token = jwt.encode(result.rows[0], 'secret');
+              res.json({success: true, token: token});
+            }
+            else {
+              res.json({success: false, msg: 'Authenticaton failed, wrong password.'});
+            }
+          });
         }
         else {
           res.json({success: false, msg: 'Authenticaton failed, invalid username.'});
@@ -59,9 +108,9 @@ module.exports = function(app,passport,pg,config){
     if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
       // console.log(req.headers.authorization);
       var token = req.headers.authorization.split(' ')[1];
-      var decodedtoken = jwt.decode(token, 'secret');
-      // console.log(decodedtoken);
-      return res.json({success: true, msg: 'Hello '+ decodedtoken.first_name});
+      var user = jwt.decode(token, 'secret');
+      delete user.password_digest;
+      return res.json({success: true, user: user});
     }
     else {
       return res.json({success:false, msg: 'Not logged in.'});

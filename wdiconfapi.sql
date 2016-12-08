@@ -147,16 +147,16 @@ VALUES
   'admin',
   'admin',
   'admin',
-  'admin',
-  'admin',
+  '',
+  '$2a$10$hg3DoYZP.NVqAJSLmah83eMrhFFbCxmkeLR5hBZ/7UGYCV7bvbR8.',
   'http://placehold.it/150x150',
   'true'
 ), (
-  'Chaz',
-  'Pereira',
-  'chaz@gmail.com',
-  'chazzy',
-  'chazzy',
+  'James',
+  'Mah',
+  'james',
+  '',
+  '$2a$10$I.SexHZDHau5IIBKOzYCYuP84ZBr8sbDaLKVkbLYf4XEzD4jxyWLa',
   'http://placehold.it/150x150',
   'true'
 ), (
