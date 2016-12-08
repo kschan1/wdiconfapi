@@ -106,8 +106,11 @@ module.exports = function Request(query,table) {
       }
       if (request.query.sort === "date") {
         request.sql_query += ", time";
-        if (request.query.order.toLowerCase() === "desc") {
-          request.sql_query += " DESC";
+        if (!!request.query.order) {
+          // Otherwise it will always be ASC
+          if (request.query.order.toLowerCase() === "desc") {
+            request.sql_query += " DESC";
+          }
         }
       }
     }
