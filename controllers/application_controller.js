@@ -39,14 +39,16 @@ module.exports = function(app,passport,pg,config){
         'first_name',
         'last_name',
         'email',
-        'password_digest'
+        'password_digest',
+        'image_url'
       ];
 
       var param_values = [
         req.body.first_name,
         req.body.last_name,
         req.body.email,
-        password_digest
+        password_digest,
+        'http://placehold.it/150x150'
       ];
 
       var sql_query = "INSERT INTO Users (" + column_keys.join(", ") + ") VALUES ($1, $2, $3, $4)";
