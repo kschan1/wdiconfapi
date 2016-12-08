@@ -1,5 +1,7 @@
 // load all the things we need
 var LocalStrategy   = require('passport-local').Strategy;
+var bcrypt = require('bcrypt');
+var saltRounds = 10;
 
 // expose this function to our app using module.exports
 module.exports = function(passport,pg,config) {
